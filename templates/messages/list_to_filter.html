@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block main %}
+<h1>{% block title %}Messages sent to {{ politician.full_name }}{% endblock %}</h1>
+<table>
+    {% for message in messages %}
+        <tr>
+            <td>{{ message.text }}</td>
+            <td>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="message_id" value="{{ message.id }}">
+                    <select name="issue_id" class="issues">
+                        {% for issue in issues %}
+                            <option value="{{ issue.id }}">{{ issue.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="stance_id" class="stances">
+                    </select>
+                    <input type="submit" value="Tag message">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<script>
+    var stances_by_issue = {{ json_issues_stances|safe }};
+    var issues_elements = $(".issues");
+    for(var i = 0; i < issues_elements.length; i++) {
+        redo({"target": issues_elements.get(i)});
+    }
+    issues_elements.bind("change", redo);
+    function redo(e) {
+        var issue_element = $(e.target);
+        var stance_element = $(issue_element.nextAll(".stances").get(0));
+        stance_element.text("");
+        var stances = stances_by_issue[issue_element.val()];
+        for(var i = 0; i < stances.length; i++) {
+            $("<option>", {"value": stances[i][0]}).text(stances[i][1]).appendTo(stance_element)
+        }
+    }
+</script>
+
+<style>
+    td {
+        padding: 5px;
+    }
+    select {
+        display: inline;
+        padding: 20px 6px;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{%block title%}Login{% endblock %}</h1>
+  <form method="POST" action="{% url 'auth:login' %}">
+    {% csrf_token %}
+    <div class="tbl">
+    {% for field in form %}
+      <div class="tbl-row">
+          {{ field.errors }}
+          <span class="tbl-cell field-label">{{ field.label_tag }}</span>
+          <span class="tbl-cell field">{{ field }}</span>
+          {% if field.help_text %}
+          <p class="help">{{ field.help_text | safe }}</p>
+          {% endif %}
+      </div>
+    {% endfor %}
+      <div class="tbl-row">
+          <span class="tbl-cell"></span>
+          <span class="tbl-cell field"><input type="submit" value = "Login" id="loginsubmit"></span>
+      </div>
+      
+    </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<h1>{% block title %}Politicians{% endblock %}</h1>
+
+{% if requesting_politicians %}
+<h2>Politicians who've asked you to filter for them</h2>
+<table>
+    {% for politician in requesting_politicians %}
+        <tr>
+            <td>{{ politician.full_name }}</td>
+            <td>
+                <form method="POST" action="{% url 'users:connect' politician.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Accept">
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{% url 'users:disconnect' politician.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Deny">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<h2>Politicians you're connected with</h2>
+<table>
+    {% for politician in connected_politicians %}
+        <tr>
+            <td>{{ politician.full_name }}</td>
+            <td><a href="{% url 'messages:filter' politician.id %}">Filter for this politician</a></td>
+            <td>
+                <form method="POST" action="{% url 'users:disconnect' politician.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Disconnect">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<style>
+    td {
+        padding: 5px;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{%block title%}Create Account{% endblock %}</h1>
+  <form method="POST" action="{% url 'auth:signup' %}">
+      <h1 style = "color: red">{{ error_messages }}</h1>
+    {% csrf_token %}
+    <div class="tbl">
+        <div class="tbl-row">
+            <span class="tbl-cell field-label">First Name:</span>
+            <span class="tbl-cell field"><input type="text" name="firstname" value="{{ firstname }}"></span>
+        </div>
+        <div class="tbl-row">
+            <span class="tbl-cell field-label">Last Name:</span>
+            <span class="tbl-cell field"><input type="text" name="lastname" value="{{ lastname }}"></span>
+        </div>
+      <div class="tbl-row">
+          <span class="tbl-cell field-label">Username:</span>
+          <span class="tbl-cell field"><input type="text" name="username" value="{{ username }}"></span>
+      </div>
+      <div class="tbl-row">
+          <span class="tbl-cell field-label">Password:</span>
+          <span class="tbl-cell field"><input type="password" name="password"></span>
+      </div>
+      <div class="tbl-row">
+          <span class="tbl-cell field-label">Confirm:</span>
+          <span class="tbl-cell field"><input type="password" name="password2"></span>
+      </div>
+      <div class="tbl-row">
+            <span class="tbl-cell field-label">Email:</span>
+            <span class="tbl-cell field"><input type="email" name="email" value="{{ email }}"></span>
+      </div>
+      <div class="tbl-row">
+            <span class="tbl-cell field-label">Register me as as a message filterer</span>
+            <span class="tbl-cell field"><input type="checkbox" name="filterer"{% if filterer %} checked{% endif %}></span>
+      </div>
+      <div class="tbl-row">
+          <span class="tbl-cell"></span>
+          <span class="tbl-cell field"><input type="submit" value = "Sign Up" id="signupsubmit"></span>
+      </div>
+    </div>
+  </form>
+  <br>
+  <p>Welcome to Your Voice, where you can send messages to real politicians. The process is simple: First, you type your message to whomever you choose. Then, a group of users called filterers will review your post and figure out what you're saying. Finally, the politician gets to see a nice summary of what you and your peers think.</p>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{%block title%}Send message{% endblock %}</h1>
+
+<form method="POST" action="{% url 'messages:new' %}">
+    {% csrf_token %}
+    <h3 style="color: red">{{ error_messages }}</h3>
+    <select name="politician">
+        {% for politician in politicians %}
+            <option value="{{ politician.id }}"{% if politician.id == politician_id %} selected{% endif %}>{{ politician.first_name }} {{ politician.last_name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <br>
+    <textarea name="message" style="font-family: inherit;" cols = "100" rows = "10">{{ message }}</textarea>
+    <br>
+    <input type="checkbox" name="is_public"{% if is_public %} checked{% endif %}>Make this message public?
+    <br>
+    <input type="submit" value="Send message">
+</form>
+
+{% endblock %}

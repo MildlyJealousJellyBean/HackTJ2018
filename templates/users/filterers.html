@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block main %}
+
+<h1>{% block title %}Filterers{% endblock %}</h1>
+
+{% if requested_filterers %}
+<h2>Filterers you've asked to filter for you</h2>
+<table>
+    {% for filterer in requested_filterers %}
+        <tr>
+            <td>{{ filterer.full_name }}</td>
+            <td>
+                <form method="POST" action="{% url 'users:disconnect' filterer.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete request">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<h2>Filterers who are filtering for you</h2>
+<table>
+    {% for filterer in connected_filterers %}
+        <tr>
+            <td>{{ filterer.full_name }}</td>
+            <td>
+                <form method="POST" action="{% url 'users:disconnect' filterer.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Disconnect">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<h2>Filterers who you can invite to filter for you</h2>
+<table>
+    {% for filterer in available_filterers %}
+        <tr>
+            <td>{{ filterer.full_name }}</td>
+            <td>
+                <form method="POST" action="{% url 'users:connect' filterer.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Connect">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+<style>
+    td {
+        padding: 5px;
+    }
+</style>
+
+{% endblock %}

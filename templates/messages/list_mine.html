@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block main %}
+<h1>{% block title %}Messages sent by you{% endblock %}</h1>
+{% if messages %}
+<table>
+    <tr>
+        <th style = "text-align: center"><h3><b>Recipient</b></h3></th>
+        <th style = "text-align: center"><h3><b>Message</b></h3></th>
+        <th style = "text-align: center"><h3><b>Time Sent</b></h3></th>
+        <th style = "text-align: center"><h3><b>Message Status</b></h3></th>
+    </tr>
+    {% for message in messages %}
+        <tr>
+            <td>{{ message.recipient.full_name }}</td>
+            <td>{{ message.text }}</td>
+            <td>{{ message.created_local_time }}</td>
+            {% if message.tag %}
+            <td>Your message was tagged by a filterer as taking the stance <q>{{ message.tag.stance.name }}</q> on the issue <q>{{ message.tag.issue.name }}</q>.</td>
+            {% else %}
+            <td>Your message hasn't yet been read by a filterer.</td>
+            {% endif %}
+            <td>
+                {% if message.is_public %}
+                    <span style="color:#F44">Public</span>
+                {% else %}
+                    Private
+                {% endif %}
+            </td>
+            <td>
+                <form method="POST" action="{% url 'messages:set_visibility' message.id %}">
+                    {% csrf_token %}
+                    {% if message.is_public %}
+                        <input type="submit" value="Make private...">
+                    {% else %}
+                        <input type="hidden" name="is_public" value="y">
+                        <input type="submit" value="Make public...">
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>You have sent no messages.</p> 
+{% endif %}
+{% endblock %}

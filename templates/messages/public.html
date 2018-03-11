@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block main %}
+<h1>{% block title %}Public messages{% endblock %}</h1>
+{% if messages %}
+<table>
+    <tr>
+        <th style = "text-align: center"><h3><b>Sent to</b></h3></th>
+        <th style = "text-align: center"><h3><b>Message</b></h3></th>
+        <th style = "text-align: center"><h3><b>Time Sent</b></h3></th>
+        <th style = "text-align: center"><h3><b>Message Status</b></h3></th>
+    </tr>
+    {% for message in messages %}
+        <tr>
+            <td>{{ message.recipient.full_name }}</td>
+            <td>{{ message.text }}</td>
+            <td>{{ message.created_local_time }}</td>
+            {% if message.tag %}
+            <td>The message was tagged by a filterer as taking the stance <q>{{ message.tag.stance.name }}</q> on the issue <q>{{ message.tag.issue.name }}</q>.</td>
+            {% else %}
+            <td>The message hasn't yet been read by a filterer.</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>There are no public messages.</p> 
+{% endif %}
+<style>
+    td, th { padding: 5px }
+    table { width: fit-content;margin:0 auto;}
+</style>
+{% endblock %}

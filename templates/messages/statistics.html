@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>{%block title%}Statistics{% endblock %}</h1>
+
+<h2>Overall Statistics of Issues</h2>
+<table>
+    <tr>
+        <th><h3>Political Issue</h3></th>
+        <th colspan="{{ max_cols }}"><h3>What people say</h3></th>
+    </tr>
+    {% for issue, stance_percents in issues_and_stances %}
+        <tr>
+        <td>{{ issue.name }}</td>
+        {% for stance, percent in stance_percents %}
+        <td><span class="percent">{{ percent|floatformat:1 }}%</span><br>supported<br><q class="stance">{{ stance.name }}</q></td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+
+    
+{% endblock %}
